@@ -1,0 +1,14 @@
+#content {
+    border: 2px solid #ccc;
+    background-color: #fff;
+    padding:20px;
+}
+ #content .box-right {
+    float : right;
+    border: 1px solid #000;
+}
+
+#content .box-right h1 {
+    font-size: 24px;
+       
+}

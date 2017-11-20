@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ContentEditor</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <% if flash[:error].present? %>
+        <p class='flash-error'><%= flash[:error] %></p>
+    <% end %>
+    <% if flash[:notice].present? %>
+        <p class='flash-notice'><%= flash[:notice] %></p>
+    <% end %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
