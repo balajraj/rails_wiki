@@ -49,7 +49,9 @@ rails generate model user
 rails generate model article
 ```
 
-Again it is not required to use the below command, but they used to create the controller and views for users/articles respectively. 
+* Controller initialization
+
+It is not required to use the below command, but they used to create the controller and views for users/articles respectively. The below commands can be used to create other controller if required. 
 ```
 rails generate controller article
 rails generate controller user
@@ -59,6 +61,6 @@ The user password is stored as simple plain text in db, the full security featur
 
 * How to run the application
 
-The application can be stated by typing rails server in the top level directory.
+The application can be started by typing rails server in the top level directory.
 Open the browser and root page can be accessed from http://localhost:3000
 
