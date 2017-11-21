@@ -5,21 +5,36 @@
 	<head> 
 	    
 		<%= stylesheet_link_tag 'article' %>
+		<%= @msg ="" %>
 		<script>
 		  function addContent() {
 		  	
-		    var x = document.getElementById("contentarea");
-		    x.style.display = "block";
-	        
-		    var y = document.getElementById("context_text");
-		    y.style.display = "none";
-		    
-		    var title = document.getElementById("title_text");
-		    title.value = '<%=escape_javascript @title %>'
-		    var language = document.getElementById("lang_text");
-		    language.value = '<%=escape_javascript @language %>'
-		    var content = document.getElementById("content_text");
-		    content.value = '<%=escape_javascript @content %>'
+			  	var currentuser = '<%=escape_javascript session[:email] %>'
+			  	var articleowner = '<%=escape_javascript @email %>'
+			  	console.log("currentuser"+currentuser)
+			  	console.log("articleowner"+articleowner)
+			  	var content = '<%=escape_javascript @content %>'
+			  	if (content) {
+			  	  if( currentuser === articleowner) {
+				  	var x = document.getElementById("contentarea");
+				    x.style.display = "block";
+			        
+				    var y = document.getElementById("context_text");
+				    y.style.display = "none";
+				    
+				    var title = document.getElementById("title_text");
+				    title.value = '<%=escape_javascript @title %>'
+				    var language = document.getElementById("lang_text");
+				    language.value = '<%=escape_javascript @language %>'
+				    var content = document.getElementById("content_text");
+				    content.value = '<%=escape_javascript @content %>'
+		  	      }
+		  	    }
+		  	    else {
+		  	    	var x = document.getElementById("contentarea");
+				    x.style.display = "block";
+			        
+		  	    } 
 		  }  
 		</script>
 	</head>
@@ -29,66 +44,66 @@
 		 	
 		 	<div class="header">
 		 	 <div id="intro1" class="header">Wiki</div>		 	 	
-		 	 <div id="loggedin_user" class="header">		 	   
+		 	 <div id="loggedin_user" class="header">
+		 	   <% unless session[:firstname].nil? %>		 	   
 		 	   <%= button_to session[:firstname]+" "+session[:lastname], "../user/logout", :method => :post ,:class => 'logout_button', :title => "logout" %> 
+		 	   <% end %>
 		 	 </div>			 	 		 	 
 		 	</div>
 		 	<div class="bodyx"> 		  		 	
-		 	 <hr>		 	 
-		 	<div id="articles" class="bodyx" >
-		 	 <% unless @results.nil? %>
-		 	        	
-		 	  <% @results.each do | key,array | %>
+		 	  <hr>		 	 
+		 	  <div id="articles" class="bodyx" >
+		 	   <% unless @results.nil? %>	 	        	
+		 	    <% @results.each do | key,array | %>
 		         <b><%= key %></b> <br>
 		         <% array.each do | x | %>
-		             <% print "the title ",x %>
+		            
 		            <%= button_to x, "showcontent", :method => :get, :class => 'button_article' , 'params' => { 'title' => x } %>
 		            <br>
 		         <% end %>
-		 	  <% end %>	
-		 	 <% end %>
-		 	  
-		   	 </div>
+		 	    <% end %>	
+		 	   <% end %>		 	  
+		   	  </div>
 
 
-		   	 <form method="get" action="/article/findarticle">
+		   	  <form method="get" action="/article/findarticle">
 	     	    <div id="search" class="bodyx" >
-	           <input  placeholder="Search" type="text" name="title" size="50"/>
-	          </div>
-	          <div id="search_title" class="bodyx" >
-	   	     <%=   image_submit_tag('search.png', class: "search-img") %>
-	        </div>
-	        </form>  
+	              <input  placeholder="Search" type="text" name="title" size="50"/>
+	            </div>
+	            <div id="search_title" class="bodyx" >
+	   	           <%=   image_submit_tag('search.png', class: "search-img") %>
+	            </div>
+	          </form>  
 
-		 	 <div id="tab_boarder" class="bodyx" >
-		 	 </div>	
-		 	 <div id="error_message" class="bodyx">
+		 	  <div id="tab_boarder" class="bodyx" >
+		 	  </div>	
+		 	  
+		    </div>
+		    <div class="bodyw" >
+
+		   	  <div id="create" class="bodyx" >
+		 	    <%=  image_tag "create.png", size: "30x28", :onclick => "addContent()" %>		 	  
+		 	  </div>
+		   	  <form method="post" action="/article/save" >
+		   	    <div id="save" class="bodyw" >
+		 		   <%=   image_submit_tag('save.png', class: "save-img") %>
+		 	    </div>	
+		   	    <div id="contentarea" class="bodyw" style="display:none" >
+		 	 	  <input id="title_text" placeholder="Title" type="text" name="articletitle" size="50" />
+		 	      <input id="lang_text" placeholder="Language" type="text" name="articlelang" size="50"/><br><br>
+		 	      <textarea id="content_text" rows="63" cols="80" name="articlecontent"> </textarea> 
+		 	     </div>	
+		 	     <div id="context_text" class ="bodyw">
+		 	 	   <%= @content %>
+		 	     </div>	
+		 	 
+		 	   </form>
+               <div id="error_message" class="bodyw">
 		 	        <% unless @msg.nil? %>
 		 	             <%= @msg %>
 		 	        <% end %> 
-		     </div>
+		       </div>
 		     
-		   </div>
-		   <div class="bodyw" >
-		   	<div id="create" class="bodyx" >
-		 	  <%=  image_tag "create.png", size: "30x28", :onclick => "addContent()" %>
-		 	  
-		 	</div>
-		   	    <form method="post" action="/article/save" >
-		   	 <div id="save" class="bodyw" >
-		 		<%=   image_submit_tag('save.png', class: "save-img") %>
-		 	 </div>	
-		   	 <div id="contentarea" class="bodyw" style="display:none" >
-		 	 	<input id="title_text" placeholder="Title" type="text" name="articletitle" size="50" />
-		 	    <input id="lang_text" placeholder="Language" type="text" name="articlelang" size="50"/><br><br>
-		 	    <textarea id="content_text" rows="63" cols="80" name="articlecontent"> </textarea> 
-		 	 </div>	
-		 	 <div id="context_text" class ="bodyw">
-		 	 	<%= @content %>
-		 	 </div>	
-		 	 
-		 	</form>
-
 		   </div>
 	</body>
 

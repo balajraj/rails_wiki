@@ -11,22 +11,26 @@
 	 	<div class="headerx">
 	 	</div>
 	 	<div class="header">
-	 	 <div id="intro1" class="header">Wiki</div>
-	 	 <form method="post" action="/user/login">
-	 	  <div id="form1" class="header">Email<br>
-	 	   <input placeholder="Email" type="mail" name="email" /><br>
-	 	  </div>
-	 	  <div id="form2" class="header">Password<br>
-	        <input placeholder="Password" type="password" name="password" /><br>
-	          
+	 	  <div id="intro1" class="header">Wiki</div>
+	 	  <form method="post" action="/user/login">
+	 	   <div id="form1" class="header">Email<br>
+	 	    <input placeholder="Email" type="mail" name="email" /><br>
+	 	   </div>
+	 	   <div id="form2" class="header">Password<br>
+	        <input placeholder="Password" type="password" name="password" /><br>   
 	       </div>
-	 	  </div>
 	 		
 	 	   <input type="submit" class="submit1" value="login" />
-	     </form>
+	      </form>
+        </div>
+
 	 	<div class="bodyx" >
 	 		<div id="form3" class="bodyx" >
-	 				
+	 			<div id="error_message" class="bodyx">
+	 				<% unless @msg.nil? %>
+	 	             <%= @msg %>
+	 	            <% end %> 
+	 		    </div>	
 	 	        <form method="post" action="/user/checkadduser" > 	          
 	 			  <input placeholder="Firstname" type="text" id="namebox" name="firstname" />
 	 			  <input placeholder="Lastname" type="text" id="namebox" name="lastname"/><br>
@@ -34,13 +38,8 @@
 	 			  <input placeholder="Re-enter email" type="text" id="mailbox" name="retyped_email" /><br>
 	 			  <input placeholder="Password" type="password" id="mailbox" name="password"/><br>
 	 			  <input type="submit" class="button2" value="Signup" />
-
 	           </form>
-	           <div id="error_message" class="bodyx">
-	 				<% unless @msg.nil? %>
-	 	             <%= @msg %>
-	 	            <% end %> 
-	 		   </div>
+	           
 	 		</div>	
 	 	</div>	
 	 	

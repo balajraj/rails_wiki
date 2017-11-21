@@ -1,6 +1,9 @@
-	class ArticleController < ApplicationController
+class ArticleController < ApplicationController
 		skip_before_action :verify_authenticity_token
 
+
+#  The save method is used for saving the article that user just typed 
+#  to the database. 
 		def save
 			title = params[:articletitle]
 			content = params[:articlecontent]
@@ -21,34 +24,18 @@
 				article_db.content = content
 				article_db.save
 			end	
-	        all_articles = Article.all
-	        @results = Hash.new
-	        all_articles.each do |article| 
-	          titles = @results[article.language]
-	          if titles.nil?
-	          	titles = Array.new
-	          end
-	          	titles << article.title
-	          	@results[article.language] = titles
-	        end
+	        getallarticles
+	        @msg =""
 			render :addarticle
 		end
 
-
+# The find article supports wild card search to find all the articles
+# Also it allows to search a article specifically on a known title
 	    def findarticle
 
 	    	title = params[:title]
 	    	if title == "*" 
-	    		all_articles = Article.all
-	            @results = Hash.new
-	            all_articles.each do |article| 
-	            titles = @results[article.language]
-	            if titles.nil?
-	          	 titles = Array.new
-	            end
-	          	titles << article.title
-	          	@results[article.language] = titles
-	        end
+	    		getallarticles
 			else
 			 article_db = Article.find_by(title: title)
 	    	 unless article_db.nil?
@@ -56,25 +43,17 @@
 	    		titles = Array.new
 	    		titles << article_db.title
 	    		@results[article_db.language] = titles
-	    	end 
+	    	 end 
 			end
 			
-	    	print @result
+	    	@msg=""
 	        render :addarticle
 	    end
 
-
-		
-		def showcontent
-			title = params[:title]
-			
-			article_db = Article.find_by(title: title)
-			unless article_db.nil?
-				@content = article_db.content
-				@title = article_db.title
-				@language = article_db.language
-
-	            all_articles = Article.all
+#  This is helper method to find all the article and sets the class variable
+# in the controller which becomes automatically availabel in the view        
+        def getallarticles
+        	    all_articles = Article.all
 	            @results = Hash.new
 	            all_articles.each do |article| 
 	             titles = @results[article.language]
@@ -84,10 +63,25 @@
 	          	 titles << article.title
 	          	 @results[article.language] = titles
 	            end
-				
+        end
+
+# the showcontent is called when the user clicks on a particular article
+# searched the article by title and displays the article to the user. 		
+		def showcontent
+			title = params[:title]
+			
+			article_db = Article.find_by(title: title)
+			user_db = User.find_by(id: article_db.user_id)
+			@email = user_db.email
+			unless article_db.nil?
+				@content = article_db.content
+				@title = article_db.title
+				@language = article_db.language		
 			end
+			getallarticles
+			@msg=""
 			render :addarticle
 		end
 
 
-	end
+end
