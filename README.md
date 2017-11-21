@@ -15,8 +15,13 @@ The mysql configuration that is present in database.yml has to be changed to loc
 configuration present in the target user system. 
  Please execute the following rake db:create, and rake db:migrate which will 
 create the database and the tables required for the application. 
-Below is the configuration in database.yml file. 
 
+It is also important to install mysql2 connector for rails if it not already installed using gem install command.
+```
+gem install mysql2
+```
+
+Below is the configuration in database.yml file. 
 ```
 default: &default
   adapter: mysql
