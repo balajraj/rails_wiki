@@ -13,8 +13,45 @@ The root of this application has been to set to user#adduser whick will be start
 The application has been tested against mysql,hence please install mysql locally. 
 The mysql configuration that is present in database.yml has to be changed to local 
 configuration present in the target user system. 
- Please execute the following rake db:create, and rake db:migrate which will 
-create the database and the tables required for the application. 
+ Please execute the following rake db:create, and rake db:migrate which will create the database and the tables required for the application. 
+
+The table information for user and article is as follows,
+```
+class CreateUsers < ActiveRecord::Migration[5.1]
+  def up
+    create_table :users do |t|
+      t.string "email", :limit => 50, :null => false
+      t.string "firstname", :limit => 50, :null => false
+      t.string "lastname", :limit => 50, :null => false
+      t.string "password", :limit => 10, :null => false
+      t.timestamps null: false
+    end
+  end
+ 
+  def down
+     drop_table :users 
+  end
+   
+end
+
+class CreateArticles < ActiveRecord::Migration[5.1]
+  def up
+    create_table :articles do |t|
+      t.text "content", :limit => 2147483647, :null => false
+      t.string "title", :limit => 100, :null => false
+      t.string "language", :limit => 20, :null => false
+      t.integer "user_id", :null => false
+      t.timestamps null: false
+    end
+  end
+
+  def down
+     drop_table :articles
+  end
+
+end
+
+```
 
 It is also important to install mysql2 connector for rails if it not already installed using gem install command.
 ```
